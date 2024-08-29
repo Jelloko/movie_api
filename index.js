@@ -1,73 +1,141 @@
 const express = require('express'),
+ bodyParser = require('body-parser'),
+ uuid = require('uuid'),
  morgan = require('morgan');
 
-const app = express();
+ const app = express();
 
+let users = [
+  {
+  id: 20,
+  name:"Jesse",
+  lists: {
+  userName: "Jello",
+  }
+},
+]
 
 let topMovies = [
     {
+      id: 1,
       title: 'The Shawshank Redemption',
-      director: 'Frank Darabont'
+      director: 'Frank Darabont',
+      genre: 'Drama'
     },
     {
+      id: 2,
       title: 'Godzilla Minus One',
-      director: 'Takashi Yamazaki'
+      director: 'Takashi Yamazaki',
+      genre: 'Kaiju',
     },
     {
+      id: 3,
       title: 'The Lord of the Rings: The Return of the King',
-      director: 'Peter Jackson'
+      director: 'Peter Jackson',
+      genre: 'Fantasy',
     },
     {
+      id: 4,
       title: 'Saving Private Ryan',
-      director: 'Steven Spielberg'
+      director: 'Steven Spielberg',
+      genre: 'Historical Fiction',
     },
     {
+      id: 5,
       title: 'Good Will Hunting',
-      director: 'Gus Van Sant'
+      director: 'Gus Van Sant',
+      genre: 'Melodrama',
     },
     {
+      id: 6,
       title: 'Gladiator',
-      director: 'Ridley Scott'
+      director: 'Ridley Scott',
+      genre: 'Historical Fiction',
     },
     {
+      id: 7,
       title: 'The Dark Knight',
-      director: 'Christopher Nolan'
+      director: 'Christopher Nolan',
+      genre: 'Superhero',
     },
     {
+      id: 8,
       title: 'Forrest Gump',
-      director: 'Robert Zemeckis'
+      director: 'Robert Zemeckis',
+      genre: 'Comedy drama',
     },
     {
+      id: 9,
       title: 'Fight Club',
-      director: 'David Fincher'
+      director: 'David Fincher',
+      genre: 'Thriller',
     },
     {
+      id: 10,
       title: 'Scary Movie',
-      director: 'Keenen Ivory Wayans'
+      director: 'Keenen Ivory Wayans',
+      genre: 'Comedy',
     }
   ];
+
+  app.use(bodyParser.json());
   
   app.use(morgan('common'));
 
   app.use(express.static('public'));
 
-  app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Error!');
-  });
-
-
-  // GET requests
+// get 
   app.get('/', (req, res) => {
     res.send('Welcome to MyFlix!');
   });
   
-  app.get('/movies', (req, res) => {
+  app.get('/topMovies', (req, res) => {
     res.json(topMovies);
   });
   
+  app.get('/topMovies/:title', (req, res) => {
+  res.json(topMovies.find((movie) =>
+    { return movie.title === req.params.title}));
+  });
+
+//post
+  app.post('/users', (req, res) => {
+    let newUser = req.body;
   
-  // listen for requests
+    if (!newUser.name) {
+      const message = 'Missing user name';
+      res.status(400).send(message);
+    } else {
+      newUser.id = uuid.v4();
+      users.push(newUser);
+      res.status(201).send(newUser);
+    }
+  });
+
+// delete
+
+app.delete('/users/:name', (req, res) => {
+  let Uzr = users.find((Uzr) => { return Uzr.name === req.params.name });
+
+  if (Uzr) {
+    users = users.filter((obj) => { return obj.name !== req.params.name });
+    res.status(201).send(' User ' + req.params.name + ' was deleted. ');
+  }
+});
+
+// put
+
+app.put('/users/:name/:list/:userName', (req, res) => {
+  let Uzr = users.find((Uzr) => { return Uzr.name === req.params.name });
+
+  if (Uzr) {
+    Uzr.lists[req.params.list] = parseInt(req.params.userName);
+    res.status(201).send(' User ' + req.params.name + ' had their Username changed to ' + req.params.userName);
+  } else {
+    res.status(404).send(' User with the name ' + req.params.name + ' was not found ');
+  }
+});
+
   app.listen(8080, () => {
     console.log('Your app is listening on port 8080.');
   });

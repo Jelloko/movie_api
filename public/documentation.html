@@ -1,13 +1,95 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>My Flix</title>
-  </head>
-  <body>
-    <h1>My Movie API</h1>
-    <p>This API was created to help users find information about movies, Users can also sign up to create a list of their favorite movies. </p>
-    <script type="module" src="server.js"></script>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation</title>
+</head>
+<body>
+    <h1>MyFlix API Documentation</h1>
+
+    <p>This API provides users with information about various movies. 
+       Users can sign up, update their personal information, and manage a list of their favorite movies.</p>
+           <h2>API Endpoints</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Business Logic</th>
+                    <th>URL</th>
+                    <th>Method</th>
+                    <th>Description</th>
+                    <th>Request Body</th>
+                    <th>Response</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Welcome to MyFlix! -->
+                <tr>
+                    <td>Welcome to MyFlix!</td>
+                    <td>/</td>
+                    <td>GET</td>
+                    <td>Website greeting</td>
+                    <td>None</td>
+                    <td>res.send website greeting</td>
+                </tr>
+                   <!-- Get All Movies -->
+                <tr>
+                    <td>Get All Movies</td>
+                    <td>/topMovies</td>
+                    <td>GET</td>
+                    <td>Returns a list of all movies</td>
+                    <td>None</td>
+                    <td>JSON object holding data about all movies</td>
+                </tr>
+                   <!-- Get Movie by Title -->
+                <tr>
+                    <td>Get Movie by Title</td>
+                    <td>/topMovies/:title</td>
+                    <td>GET</td>
+                    <td>Finds a movie by title</td>
+                    <td>None</td>
+                    <td>JSON object about a single movie containing (title, director, genre)</td>
+                </tr>
+                <!-- Register User -->
+                <tr>
+                    <td>Register User</td>
+                    <td>/users</td>
+                    <td>POST</td>
+                    <td>Adds new user</td>
+                    <td>A JSON object holding data about the user structed like: {
+                        name: Jesse,
+                        list: {
+                            userName: Jello
+                        }
+                    }
+                    </td>
+                    <td>A JSON object holding data about the user structed like: {
+                        id:1,
+                        name: Jesse,
+                        list: {
+                            userName: Jello
+                        }
+                    }</td>
+                </tr>
+                   <!-- Update User -->
+                <tr>
+                    <td>Update User</td>
+                    <td>/users/:name/:list/:Username</td>
+                    <td>PUT</td>
+                    <td>Changes username</td>
+                    <td>None</td>
+                    <td>Confirmation message</td>
+                </tr>
+                   <!-- Deregister User -->
+                <tr>
+                    <td>Deregister User</td>
+                    <td>/users/:name</td>
+                    <td>DELETE</td>
+                    <td>Deletes user by name</td>
+                    <td>None</td>
+                    <td>Confirmation message</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
 </html>

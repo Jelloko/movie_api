@@ -13,6 +13,20 @@ let users = [
   userName: "Jello",
   }
 },
+{
+  id: 21,
+  name:"Josh",
+  lists: {
+  userName: "Tater",
+  }
+},
+{
+  id: 22,
+  name:"Jordan",
+  lists: {
+  userName: "Taffys",
+  }
+},
 ]
 
 let topMovies = [
@@ -38,31 +52,31 @@ let topMovies = [
       id: 4,
       title: 'Saving Private Ryan',
       director: 'Steven Spielberg',
-      genre: 'Historical Fiction',
+      genre: 'War film',
     },
     {
       id: 5,
-      title: 'Good Will Hunting',
-      director: 'Gus Van Sant',
-      genre: 'Melodrama',
+      title: 'Jaws',
+      director: 'Steven Spielberg',
+      genre: 'Thriller',
     },
     {
       id: 6,
-      title: 'Gladiator',
-      director: 'Ridley Scott',
-      genre: 'Historical Fiction',
+      title: '12 Angry Men',
+      director: 'Sidney Lumet',
+      genre: 'Drama',
     },
     {
       id: 7,
       title: 'The Dark Knight',
       director: 'Christopher Nolan',
-      genre: 'Superhero',
+      genre: 'Action',
     },
     {
       id: 8,
-      title: 'Forrest Gump',
-      director: 'Robert Zemeckis',
-      genre: 'Comedy drama',
+      title: 'Inception',
+      director: 'Christopher Nolan',
+      genre: 'Action',
     },
     {
       id: 9,

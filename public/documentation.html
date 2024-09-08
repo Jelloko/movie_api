@@ -35,20 +35,56 @@
                    <!-- Get All Movies -->
                 <tr>
                     <td>Get All Movies</td>
-                    <td>/topMovies</td>
+                    <td>/movies</td>
                     <td>GET</td>
                     <td>Returns a list of all movies</td>
                     <td>None</td>
                     <td>JSON object holding data about all movies</td>
                 </tr>
+                <!-- Get All Users -->
+                <tr>
+                    <td>Get All Users</td>
+                    <td>/users</td>
+                    <td>GET</td>
+                    <td>Returns a list of all users</td>
+                    <td>None</td>
+                    <td>JSON object holding data about all users</td>
+                </tr>
                    <!-- Get Movie by Title -->
                 <tr>
                     <td>Get Movie by Title</td>
-                    <td>/topMovies/:title</td>
+                    <td>/movies/:title</td>
                     <td>GET</td>
                     <td>Finds a movie by title</td>
                     <td>None</td>
-                    <td>JSON object about a single movie containing (title, director, genre)</td>
+                    <td>JSON object about a single movie containing (_id, Title, Description, Director, Genre, Image, Featured)</td>
+                </tr>
+                 <!-- Get User by Name -->
+                 <tr>
+                    <td>Get User by Name</td>
+                    <td>/users/:Name</td>
+                    <td>GET</td>
+                    <td>Finds a user by name</td>
+                    <td>None</td>
+                    <td>JSON object about a single user containing (_id, Name, Password, Email, Birthday, FavoriteMovies, __v)</td>
+                </tr>
+                <!-- Get Genre by Name -->
+                <tr>
+                    <td>Get Genre by Name</td>
+                    <td>/movies/Genre/:genreName</td>
+                    <td>GET</td>
+                    <td>Finds a genre by name</td>
+                    <td>None</td>
+                    <td>JSON object about a single genre containing (Name, Description)</td>
+                </tr>
+                <!-- Get Director by Name -->
+                <tr>
+                    <td>Get Director by Name</td>
+                    <td>/movies/Director/:directorName</td>
+                    <td>GET</td>
+                    <td>Finds a director by name</td>
+                    <td>None</td>
+                    <td>JSON object about a single director containing (Name, Bio, Birth, Death)</td>
                 </tr>
                 <!-- Register User -->
                 <tr>
@@ -57,26 +93,35 @@
                     <td>POST</td>
                     <td>Adds new user</td>
                     <td>A JSON object holding data about the user structed like: {
-                        name: Jesse,
-                        list: {
-                            userName: Jello
+                        "Name": "Pickle",
+                        "Password": "Picky3",
+                        "Email": "Picket.Bucket@gmail.com",
+                        "Birthday": "2000-06-21"
                         }
-                    }
                     </td>
-                    <td>A JSON object holding data about the user structed like: {
-                        id:1,
-                        name: Jesse,
-                        list: {
-                            userName: Jello
-                        }
-                    }</td>
+                    <td>Confirmation message</td>
                 </tr>
-                   <!-- Update User -->
+                   <!-- Update User Information -->
                 <tr>
-                    <td>Update User</td>
-                    <td>/users/:name/:list/:Username</td>
+                    <td>Update User Information</td>
+                    <td>/users/:Name</td>
                     <td>PUT</td>
-                    <td>Changes username</td>
+                    <td>Updates User Information</td>
+                    <td>A JSON object holding data about the user structed like: {
+                        "Name": "Pickle",
+                        "Password": "Picky3",
+                        "Email": "Picket.Bucket@gmail.com",
+                        "Birthday": "2000-06-21"
+                        }
+                    </td>
+                    <td>Confirmation message</td>
+                </tr>
+                <!-- Add Movie to FavoriteMovies -->
+                <tr>
+                    <td>Add Movie to FavoriteMovies</td>
+                    <td>/users/:Name/FavoriteMovies/:moviesID</td>
+                    <td>PUT</td>
+                    <td>Adds a movie to user FavoriteMovies</td>
                     <td>None</td>
                     <td>Confirmation message</td>
                 </tr>
@@ -86,6 +131,15 @@
                     <td>/users/:name</td>
                     <td>DELETE</td>
                     <td>Deletes user by name</td>
+                    <td>None</td>
+                    <td>Confirmation message</td>
+                </tr>
+                <!-- Remove Movie from FavoriteMovies -->
+                <tr>
+                    <td>Remove Movie from FavoriteMovies</td>
+                    <td>/users/:Name/FavoriteMovies/:moviesID</td>
+                    <td>DELETE</td>
+                    <td>Removes a movie from the users favoitemovies</td>
                     <td>None</td>
                     <td>Confirmation message</td>
                 </tr>

@@ -14,6 +14,13 @@ const express = require('express'),
  mongoose.connect('mongodb://localhost:27017/dbflix');
 
   app.use(bodyParser.json());
+
+  app.use(bodyParser.urlencoded({ extended: true }));
+
+  let auth = require('./auth')(app);
+
+  const passport = require('passport');
+  require('./passport');
   
   app.use(morgan('common'));
 
@@ -24,7 +31,7 @@ const express = require('express'),
     res.send('Welcome to MyFlix!');
   });
   
-  app.get('/movies', async (req, res) => {
+  app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
     await Movies.find()
       .then((movies) => {
         res.status(201).json(movies);
@@ -35,7 +42,7 @@ const express = require('express'),
       });
   });
   
-  app.get('/movies/:Title', async (req, res) => {
+  app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), async (req, res) => {
     await Movies.findOne({ Title: req.params.Title })
       .then((movie) => {
         res.json(movie);
@@ -46,7 +53,7 @@ const express = require('express'),
       });
   });
 
-  app.get('/movies/Genre/:genreName', async (req, res) => {
+  app.get('/movies/Genre/:genreName', passport.authenticate('jwt', { session: false }), async (req, res) => {
     await Movies.findOne({ 'Genre.Name': req.params.genreName })
       .then((movies) => {
         res.json(movies.Genre);
@@ -57,7 +64,7 @@ const express = require('express'),
       });
   });
 
-  app.get('/movies/Director/:directorName', async (req, res) => {
+  app.get('/movies/Director/:directorName', passport.authenticate('jwt', { session: false }), async (req, res) => {
     await Movies.findOne({ 'Director.Name': req.params.directorName })
       .then((movies) => {
         res.json(movies.Director);
@@ -68,7 +75,7 @@ const express = require('express'),
       });
   });
 
-  app.get('/users', async (req, res) => {
+  app.get('/users', passport.authenticate('jwt', { session: false }), async (req, res) => {
     await Users.find()
       .then((users) => {
         res.status(201).json(users);
@@ -79,7 +86,7 @@ const express = require('express'),
       });
   });
 
-  app.get('/users/:Name', async (req, res) => {
+  app.get('/users/:Name', passport.authenticate('jwt', { session: false }), async (req, res) => {
     await Users.findOne({ Name: req.params.Name })
       .then((user) => {
         res.json(user);
@@ -118,7 +125,7 @@ app.post('/users', async (req, res) => {
 });
 
 // delete
-app.delete('/users/:Name', async (req, res) => {
+app.delete('/users/:Name', passport.authenticate('jwt', { session: false }), async (req, res) => {
   await Users.findOneAndDelete({ Name: req.params.Name })
     .then((user) => {
       if (!user) {
@@ -133,7 +140,7 @@ app.delete('/users/:Name', async (req, res) => {
     });
 });
 
-app.delete('/users/:Name/FavoriteMovies/:moviesID', async (req, res) => {
+app.delete('/users/:Name/FavoriteMovies/:moviesID', passport.authenticate('jwt', { session: false }), async (req, res) => {
   await Users.findOneAndUpdate({ Name: req.params.Name }, { $pull:
     { FavoriteMovies: req.params.moviesID }
   },
@@ -149,7 +156,10 @@ app.delete('/users/:Name/FavoriteMovies/:moviesID', async (req, res) => {
 });
 
 // put
-app.put('/users/:Name', async (req, res) => {
+app.put('/users/:Name', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  if(req.user.Name !== req.params.Name){
+    return res.status(400).send('Permission denied');
+  }
   await Users.findOneAndUpdate({ Name: req.params.Name }, { $set:
     {
       Name: req.body.Name,
@@ -169,7 +179,7 @@ app.put('/users/:Name', async (req, res) => {
 
 });
 
-app.put('/users/:Name/FavoriteMovies/:moviesID', async (req, res) => {
+app.put('/users/:Name/FavoriteMovies/:moviesID', passport.authenticate('jwt', { session: false }), async (req, res) => {
   await Users.findOneAndUpdate({ Name: req.params.Name }, { $push:
     { FavoriteMovies: req.params.moviesID }
   },

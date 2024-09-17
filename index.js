@@ -14,7 +14,8 @@ const express = require('express'),
  const Genres = Models.Genre;
  const Directors = Models.Director;
 
- mongoose.connect('mongodb://localhost:27017/dbflix');
+ //mongoose.connect('mongodb://localhost:27017/dbflix');
+ mongoose.connect(process.env.CONNECTION_URI,'mongodb+srv://Jesjor:Riceboy231@jswebcluster.xdbbh.mongodb.net/myFlixDB?retryWrites=true&w=majority&appName=JsWebCluster');
 
   app.use(bodyParser.json());
 

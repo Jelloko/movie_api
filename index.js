@@ -1,9 +1,12 @@
 const express = require('express'),
  bodyParser = require('body-parser'),
  uuid = require('uuid'),
+ bcrypt = require('bcrypt'),
  mongoose = require('mongoose'),
  Models = require('./models.js'),
  morgan = require('morgan');
+
+ const { check, validationResult } = require('express-validator');
 
  const app = express();
  const Movies = Models.movies;
@@ -16,6 +19,9 @@ const express = require('express'),
   app.use(bodyParser.json());
 
   app.use(bodyParser.urlencoded({ extended: true }));
+
+  const cors = require('cors');
+  app.use(cors());
 
   let auth = require('./auth')(app);
 
@@ -98,7 +104,18 @@ const express = require('express'),
   });
 
 //post
-app.post('/users', async (req, res) => {
+app.post('/users', check('Name', 'Name is required').isLength({min: 5}),
+check('Name', 'Name contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+check('Password', 'Password is required').not().isEmpty(),
+check('Email', 'Email does not appear to be valid').isEmail()
+, async (req, res) => {
+  let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
+  let hashedPassword = Users.hashPassword(req.body.Password);
   await Users.findOne({ Name: req.body.Name })
     .then((user) => {
       if (user) {
@@ -107,11 +124,11 @@ app.post('/users', async (req, res) => {
         Users
           .create({
             Name: req.body.Name,
-            Password: req.body.Password,
+            Password: hashedPassword,
             Email: req.body.Email,
             Birthday: req.body.Birthday
           })
-          .then((user) =>{res.status(201).json(req.body.Name + ' You have succesffuly created an account ') })
+          .then((user) =>{res.status(201).json(user) })
         .catch((error) => {
           console.error(error);
           res.status(500).send('Error: ' + error);
@@ -156,21 +173,31 @@ app.delete('/users/:Name/FavoriteMovies/:moviesID', passport.authenticate('jwt',
 });
 
 // put
-app.put('/users/:Name', passport.authenticate('jwt', { session: false }), async (req, res) => {
+app.put('/users/:Name', passport.authenticate('jwt', { session: false }), check('Name', 'Name is required').isLength({min: 5}),
+check('Name', 'Name contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+check('Password', 'Password is required').not().isEmpty(),
+check('Email', 'Email does not appear to be valid').isEmail()
+, async (req, res) => {
+  let errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
   if(req.user.Name !== req.params.Name){
     return res.status(400).send('Permission denied');
   }
+
   await Users.findOneAndUpdate({ Name: req.params.Name }, { $set:
     {
       Name: req.body.Name,
-      Password: req.body.Password,
+      Password: Users.hashPassword(req.body.Password),
       Email: req.body.Email,
       Birthday: req.body.Birthday
     }
   },
   { new: true }) 
   .then((updatedUser) => {
-    res.json(' Information for ' + req.params.Name + ' sucessfully updated ' );
+    res.json(updatedUser);
   })
   .catch((error) => {
     console.error(error);
@@ -194,6 +221,7 @@ app.put('/users/:Name/FavoriteMovies/:moviesID', passport.authenticate('jwt', { 
 
 });
 
-  app.listen(8080, () => {
-    console.log('Your app is listening on port 8080.');
-  });
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port);
+});

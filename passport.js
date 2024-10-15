@@ -6,7 +6,7 @@ const passport = require('passport'),
 let Users = Models.users,
   JWTStrategy = passportJWT.Strategy,
   ExtractJWT = passportJWT.ExtractJwt;
-//passport
+
 passport.use(
   new LocalStrategy(
     {
@@ -27,7 +27,7 @@ passport.use(
           console.log('incorrect password');
           return callback(null, false, { message: 'Incorrect password.' });
         }
-        console.log('finished');
+        console.log('Done');
         return callback(null, user);
       })
       .catch((error) => {
@@ -39,7 +39,6 @@ passport.use(
     }
   )
 );
-
 
 passport.use(new JWTStrategy({
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),

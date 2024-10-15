@@ -10,7 +10,7 @@ let Users = Models.users,
 passport.use(
   new LocalStrategy(
     {
-      NameField: 'Name',
+      usernameField: 'Name',
       passwordField: 'Password',
     },
     async (Name, password, callback) => {
@@ -27,7 +27,7 @@ passport.use(
           console.log('incorrect password');
           return callback(null, false, { message: 'Incorrect password.' });
         }
-        console.log('finished');
+        console.log('Done');
         return callback(null, user);
       })
       .catch((error) => {
@@ -39,7 +39,6 @@ passport.use(
     }
   )
 );
-
 
 passport.use(new JWTStrategy({
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),

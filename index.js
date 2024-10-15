@@ -1,3 +1,4 @@
+//dependencies
 const express = require('express'),
  bodyParser = require('body-parser'),
  uuid = require('uuid'),
@@ -8,6 +9,7 @@ const express = require('express'),
 
  const { check, validationResult } = require('express-validator');
 
+ //const
  const app = express();
  const Movies = Models.movies;
  const Users = Models.users;
@@ -222,6 +224,7 @@ app.put('/users/:Name/FavoriteMovies/:moviesID', passport.authenticate('jwt', { 
 
 });
 
+//port
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0',() => {
  console.log('Listening on Port ' + port);

@@ -51,16 +51,7 @@ const express = require('express'),
       });
   });
   
-  app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    await Movies.findOne({ Title: req.params.Title })
-      .then((movie) => {
-        res.json(movie);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send('Error: ' + err);
-      });
-  });
+  
 
   app.get('/movies/Genre/:genreName', passport.authenticate('jwt', { session: false }), async (req, res) => {
     await Movies.findOne({ 'Genre.Name': req.params.genreName })

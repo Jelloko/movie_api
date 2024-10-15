@@ -6,7 +6,7 @@ const passport = require('passport'),
 let Users = Models.users,
   JWTStrategy = passportJWT.Strategy,
   ExtractJWT = passportJWT.ExtractJwt;
-
+//passport
 passport.use(
   new LocalStrategy(
     {
@@ -40,7 +40,7 @@ passport.use(
   )
 );
 
-//passport
+
 passport.use(new JWTStrategy({
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
   secretOrKey: 'your_jwt_secret'

@@ -166,7 +166,7 @@ app.delete('/users/:Name/FavoriteMovies/:moviesID', passport.authenticate('jwt',
   },
   { new: true }) 
   .then((updatedUser) => {
-    res.json(req.params.moviesID + ' was removed ');
+    res.json(updatedUser);
   })
   .catch((error) => {
     console.error(error);
@@ -215,7 +215,7 @@ app.put('/users/:Name/FavoriteMovies/:moviesID', passport.authenticate('jwt', { 
   },
   { new: true }) 
   .then((updatedUser) => {
-    res.json(req.params.moviesID + ' was added ');
+    res.json(updatedUser);
   })
   .catch((error) => {
     console.error(error);

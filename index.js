@@ -1,4 +1,7 @@
 //dependencies
+
+require('dotenv').config();  // <-- Add this line to load environment variables from .env file
+
 const express = require('express'),
  bodyParser = require('body-parser'),
  uuid = require('uuid'),
